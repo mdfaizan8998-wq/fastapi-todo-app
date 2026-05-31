@@ -1,0 +1,633 @@
+/* ==========================================================================
+   1. Google Fonts & Root Variables (Theming)
+   ========================================================================== */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+
+:root {
+    --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #311042 100%);
+    --glass-bg: rgba(255, 255, 255, 0.03);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --accent-purple: #a855f7;
+    --accent-blue: #3b82f6;
+    --accent-green: #10b981;
+    --accent-red: #ef4444;
+    --radius-lg: 24px;
+    --radius-md: 12px;
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ==========================================================================
+   2. Base Reset & Background Animations
+   ========================================================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+body {
+    background: var(--bg-gradient);
+    color: var(--text-primary);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-x: hidden;
+    padding: 40px 20px;
+}
+
+/* Glowing Background Circles */
+.background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+}
+
+.circle {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(120px);
+    opacity: 0.4;
+    animation: float 10s infinite alternate ease-in-out;
+}
+
+.circle1 {
+    width: 400px;
+    height: 400px;
+    background: var(--accent-purple);
+    top: -10%;
+    left: -10%;
+}
+
+.circle2 {
+    width: 500px;
+    height: 500px;
+    background: var(--accent-blue);
+    bottom: -20%;
+    right: -10%;
+    animation-delay: -3s;
+}
+
+.circle3 {
+    width: 300px;
+    height: 300px;
+    background: #ec4899;
+    top: 40%;
+    left: 50%;
+    animation-delay: -5s;
+}
+
+@keyframes float {
+    0% {
+        transform: translate(0, 0) scale(1);
+    }
+
+    100% {
+        transform: translate(40px, 30px) scale(1.1);
+    }
+}
+
+/* ==========================================================================
+   3. Main Container & Header
+   ========================================================================== */
+.container {
+    width: 100%;
+    max-width: 680px;
+    animation: fadeIn 0.8s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.todo-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: 40px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--glass-border);
+    padding-bottom: 30px;
+    margin-bottom: 35px;
+}
+
+.badge {
+    background: linear-gradient(90deg, rgba(168, 85, 247, 0.2), rgba(59, 130, 246, 0.2));
+    border: 1px solid rgba(168, 85, 247, 0.4);
+    color: #c084fc;
+    padding: 6px 16px;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    display: inline-block;
+    margin-bottom: 12px;
+}
+
+.header h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    background: linear-gradient(to right, #fff, #94a3b8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.subtitle {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    margin-top: 4px;
+}
+
+/* Date Box */
+.date-box {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    padding: 12px 18px;
+    border-radius: var(--radius-md);
+    text-align: center;
+    min-width: 80px;
+}
+
+.date-box .day {
+    display: block;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1;
+}
+
+.date-box .month {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: var(--accent-purple);
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+/* ==========================================================================
+   4. Forms & Inputs
+   ========================================================================== */
+.form-box {
+    margin-bottom: 35px;
+}
+
+.section-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.input-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+input[type="text"],
+input[type="date"],
+textarea,
+select {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.2);
+    /* Translucent dark background */
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    /* Thin elegant glass border */
+    padding: 14px 16px;
+    border-radius: 12px;
+    /* Smooth rounded corners */
+    color: #f8fafc;
+    /* Off-white text color */
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    appearance: none;
+    /* Native browser arrow hatane ke liye */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394a3b8'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    /* Custom stylish arrow position */
+    background-size: 16px;
+}
+
+select:focus {
+    outline: none;
+    border-color: #a855f7;
+    /* Elegant purple border on click */
+    background: rgba(0, 0, 0, 0.35);
+    box-shadow: 0 0 18px rgba(168, 85, 247, 0.3);
+    /* Soft purple neon glow */
+}
+
+select option {
+    background: #1e1b4b;
+    /* Premium dark-blue/purple background */
+    color: #f8fafc;
+    /* Clear white visible text */
+    padding: 12px;
+    font-size: 0.95rem;
+}
+
+select option[value="normal"] {
+    color: #3b82f6;
+    /* Sky Blue color for Normal status */
+}
+
+select option[value="moderate"] {
+    color: #a855f7;
+    /* Bright Purple color for Priority */
+}
+
+select option[value="urgent"] {
+    color: #ef4444;
+    /* Vibrant Red color for Urgent */
+    font-weight: 600;
+}
+
+select option[value="completed"] {
+    color: #10b981;
+    /* Emerald Green color for Completed status */
+    font-weight: 600;
+}
+
+textarea {
+    resize: none;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+    border-color: var(--accent-purple);
+    background: rgba(0, 0, 0, 0.3);
+    box-shadow: 0 0 15px rgba(168, 85, 247, 0.25);
+}
+
+/* Buttons */
+button[type="submit"] {
+    background: linear-gradient(135deg, var(--accent-purple) 0%, var(--accent-blue) 100%);
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: 0 4px 15px rgba(168, 85, 247, 0.3);
+}
+
+button[type="submit"]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(168, 85, 247, 0.5);
+    filter: brightness(1.1);
+}
+
+/* ==========================================================================
+   5. Stats Dashboard
+   ========================================================================== */
+.stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin: 30px 0;
+    background: rgba(0, 0, 0, 0.15);
+    padding: 16px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--glass-border);
+}
+
+.stat {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.stat-number {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.stat:nth-child(1) .stat-number {
+    color: var(--accent-blue);
+}
+
+.stat:nth-child(2) .stat-number {
+    color: var(--accent-green);
+}
+
+.stat:nth-child(3) .stat-number {
+    color: var(--accent-purple);
+}
+
+.stat-label {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* ==========================================================================
+   6. Task List & Items
+   ========================================================================== */
+.task-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 20px;
+}
+
+.task {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    padding: 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: var(--transition);
+}
+
+.task:hover {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(255, 255, 255, 0.15);
+    transform: translateX(4px);
+}
+
+.task-left {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    flex: 1;
+}
+
+/* Custom Checkbox Button */
+.check-btn {
+    background: none;
+    border: 2px solid var(--text-secondary);
+    color: var(--text-secondary);
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: var(--transition);
+    margin-top: 2px;
+}
+
+.check-btn:hover {
+    border-color: var(--accent-green);
+    color: var(--accent-green);
+    background: rgba(16, 185, 129, 0.1);
+}
+
+/* Task Content */
+.task-content h3 {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+    transition: var(--transition);
+}
+
+.task-content p {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+.task-meta {
+    display: flex;
+    gap: 16px;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+/* Task States (Completed, Priority) */
+.task.completed {
+    opacity: 0.6;
+}
+
+.task.completed .task-content h3 {
+    text-decoration: line-through;
+    color: var(--text-secondary);
+}
+
+.task.completed .check-btn {
+    background: var(--accent-green);
+    border-color: var(--accent-green);
+    color: white;
+}
+
+.task.priority {
+    border-left: 4px solid var(--accent-purple);
+}
+
+/* Actions & Dropdowns */
+.actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.icon-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    color: var(--text-secondary);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 1rem;
+}
+
+.icon-btn:hover {
+    background: var(--glass-bg);
+    color: var(--text-primary);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.icon-btn.delete:hover {
+    background: rgba(239, 68, 68, 0.15);
+    color: var(--accent-red);
+    border-color: rgba(239, 68, 68, 0.4);
+}
+
+/* Edit Dropdown (Details Tag) */
+.edit-box {
+    position: relative;
+}
+
+.edit-box[open] .icon-btn {
+    background: var(--accent-purple);
+    color: white;
+}
+
+summary {
+    list-style: none;
+}
+
+summary::-webkit-details-marker {
+    display: none;
+}
+
+.edit-form {
+    position: absolute;
+    right: 0;
+    top: 45px;
+    background: #1e1b4b;
+    border: 1px solid var(--glass-border);
+    padding: 20px;
+    border-radius: var(--radius-md);
+    z-index: 10;
+    width: 260px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.edit-form label {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.checkbox-line {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    padding: 4px 0;
+}
+
+.checkbox-line input {
+    accent-color: var(--accent-purple);
+}
+
+/* ==========================================================================
+   7. AI Suggestions & Empty State
+   ========================================================================== */
+.ai-result {
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.15) 0%, rgba(59, 130, 246, 0.15) 100%);
+    border: 1px dashed rgba(168, 85, 247, 0.4);
+    padding: 20px;
+    border-radius: var(--radius-md);
+    margin-top: 15px;
+    animation: pulseGlow 2s infinite alternate;
+}
+
+@keyframes pulseGlow {
+    0% {
+        box-shadow: 0 0 10px rgba(168, 85, 247, 0.1);
+    }
+
+    100% {
+        box-shadow: 0 0 20px rgba(168, 85, 247, 0.3);
+    }
+}
+
+.ai-result h3 {
+    color: #c084fc;
+    font-size: 1rem;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Duplicate Container Cleanup & UI Fallback */
+.tasks-container {
+    display: none;
+    /* Hiding the redundant static block in your HTML structure to avoid duplication */
+}
+
+.task-list:has(.task)+.tasks-container {
+    display: none;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.action-buttons button {
+    flex: 1;
+}
+
+.ai-input-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.ai-input-wrapper textarea {
+    width: 100%;
+    padding-right: 70px;
+    background-image: none;
+    /* textarea se arrow hatao */
+}
+
+.mic-btn {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    width: 50px;
+    height: 50px;
+    border: solid 3px #19be19;
+    background: rgba(168, 85, 247, 0.15);
+    color: var(--accent-blue);
+    border-radius: 60%;
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.3s;
+}
+
+.mic-btn:hover {
+    background: rgba(168, 85, 247, 0.3);
+    transform: scale(1.05);
+}

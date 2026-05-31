@@ -3,7 +3,6 @@ from fastapi.responses import JSONResponse
 import json
 from fastapi.responses import HTMLResponse, RedirectResponse
 from database import conn, cursor
-from models import TaskSchema, TaskUpdateSchema, TaskResponseSchema, AIRequest,ResponseSchema
 from typing import List
 from ai_service import call_llm
 from fastapi.templating import Jinja2Templates

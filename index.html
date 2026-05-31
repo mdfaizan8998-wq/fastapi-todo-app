@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Todo App</title>
+    <link rel="stylesheet" href="../static/style2.css">
+</head>
+
+<body>
+    <div class="background">
+        <div class="circle circle1"></div>
+        <div class="circle circle2"></div>
+        <div class="circle circle3"></div>
+    </div>
+
+    <main class="container">
+        <section class="todo-card">
+            <div class="header">
+                <div>
+                    <p class="badge">My Daily Planner</p>
+                    <h1>Todo App</h1>
+                    <p class="subtitle">Organize your day beautifully and stay productive.</p>
+                </div>
+
+                <div class="date-box">
+                    <span class="day">{{ today_day }}</span>
+                    <span class="month">{{ today_month }}</span>
+                </div>
+            </div>
+
+            <div class="form-box">
+                <h2 class="section-title">Add New Task</h2>
+                <form action="/create" method="post" class="input-grid">
+                    <input type="text" name="title" placeholder="Task title" required>
+                    <input type="text" name="description" placeholder="Task description" required>
+                    <input type="date" name="due_date">
+                    <button type="submit">Add Task</button>
+                </form>
+            </div>
+
+            <div class="form-box">
+                <h2 class="section-title">AI Create Task</h2>
+
+                <form action="/ai_create_task" method="post" class="input-grid">
+
+                    <div class="ai-input-wrapper">
+                        <textarea id="taskInput" name="text" rows="3"
+                            placeholder="Ask Me Question And I also Suggest You Description" required></textarea>
+
+                        <button type="button" id="micBtn" class="mic-btn">zara🎤
+                        </button>
+                    </div>
+
+                    <button type="submit">Ask Me</button>
+
+
+                </form>
+
+
+                <div class="stats">
+                    <div class="stat">
+                        <span class="stat-number">{{ total_tasks }}</span>
+                        <span class="stat-label">Tasks</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">{{ done_tasks }}</span>
+                        <span class="stat-label">Done</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">{{ pending_tasks }}</span>
+                        <span class="stat-label">Pending</span>
+                    </div>
+                </div>
+
+                <div class="task-list">
+                    {% if tasks %}
+                    {% for task in tasks %}
+                    <div
+                        class="task {% if task.completed %}completed{% endif %} {% if task.status == 'priority' %}priority{% endif %}">
+                        <div class="task-left">
+                            <form action="/update/{{ task.id }}" method="post" class="status-form">
+                                <input type="hidden" name="_method" value="put">
+                                <button type="submit" class="check-btn">
+                                    {% if task.completed %}✓{% else %}○{% endif %}
+                                </button>
+                            </form>
+
+                            <div class="task-content">
+                                <h3>{{ task.title }}</h3>
+                                <p>{{ task.description }}</p>
+
+                                <div class="task-meta">
+                                    <span>Status: {{ task.status or "normal" }}</span>
+                                    <span>Due: {{ task.due_date or "No date" }}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="actions">
+                            <details class="edit-box">
+                                <summary class="icon-btn">✎</summary>
+                                <form action="/update/{{ task.id }}" method="post" class="edit-form">
+                                    <input type="hidden" name="_method" value="put">
+
+                                    <label>Status</label>
+                                    <select name="status">
+                                        <option value="">Keep same</option>
+                                        <option value="normal">Normal</option>
+                                        <option value="moderate">moderate</option>
+                                        <option value="urgent">Urgent</option>
+                                        <option value="completed">completed</option>
+                                    </select>
+
+                                    <label>Due Date</label>
+                                    <input type="date" name="due_date">
+
+                                    <label class="checkbox-line">
+                                        <input type="checkbox" name="completed" value="1" {% if task.completed
+                                            %}checked{% endif %}>
+                                        Mark as completed
+                                    </label>
+
+                                    <button type="submit">Update</button>
+                                </form>
+                            </details>
+
+                            <form action="/delete/{{ task.id }}" method="post">
+                                <input type="hidden" name="_method" value="delete">
+                                <button type="submit" class="icon-btn delete">🗑</button>
+                            </form>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+                    {% if ai_title %}
+                    <div class="ai-result">
+                        <h3>AI Suggestion</h3>
+                        <p><strong>Title:</strong> {{ ai_title }}</p>
+                        <p><strong>Description:</strong> {{ ai_description }}</p>
+                    </div>
+                    {% endif %}
+
+                    {% if ai_answer %}
+                    <div class="ai-result">
+                        <h3>AI Answer</h3>
+                        <p>{{ ai_answer }}</p>
+                    </div>
+                    {% endif %}
+                    <div class="tasks-container">
+                        {% if tasks %}
+
+                        {% for task in tasks %}
+                        <div class="task">
+                            <div class="task-left">
+                                <div>
+                                    <h3>{{ task.title }}</h3>
+                                    <p>{{ task.description }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+
+                        {% else %}
+                        <div class="task">
+                            <div class="task-left">
+                                <div>
+                                    <h3>No tasks yet</h3>
+                                    <p>Add your first task above.</p>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+        </section>
+    </main>
+    <script src="/static/script.js"></script>
+</body>
+
+</html>

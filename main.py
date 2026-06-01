@@ -9,7 +9,7 @@ from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from pathlib import Path
 from datetime import datetime
-app = FastAPI(title="My TO Do App")
+app = FastAPI(title="My AI TO Do App")
 
 BASE_DIR = Path(__file__).resolve().parent
 

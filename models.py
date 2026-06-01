@@ -29,4 +29,4 @@ class AIRequest(BaseModel):
 class ResponseSchema(BaseModel):
     title: str
     description: str
-    
+    da

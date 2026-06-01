@@ -1,5 +1,5 @@
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-d
+
 if (SpeechRecognition) {
     const recognition = new SpeechRecognition();
     recognition.lang = 'hi-IN'; // Baseline for multi-language

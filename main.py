@@ -57,117 +57,56 @@ def get_all_Task(request: Request):
 )
 
 @app.post("/ai_create_task")
-def create_task_from_ai(text: str = Form(...)):
-    # 1. LLM ko call kiya
+def create_task_from_ai(request: Request, text: str = Form(...)):
     ai_response = call_llm(text)
+
     print("AI RESPONSE =", repr(ai_response))
 
     if not ai_response:
-        return {"status": "error", "message": "AI response is empty"}
+        raise HTTPException(status_code=500, detail="AI response is empty")
 
-    # 2. JSON Parsing
     try:
         cleaned = ai_response.replace("```json", "").replace("```", "").strip()
         task_data = json.loads(cleaned)
     except json.JSONDecodeError:
-        return {"status": "error", "message": "Invalid JSON from AI"}
+        raise HTTPException(status_code=400, detail="AI response is not valid JSON")
 
     result_type = task_data.get("type")
 
-    # CASE A: Agar Task mila
     if result_type == "task":
         title = task_data.get("title")
         description = task_data.get("description")
 
-        # Database mein insert kiya
         cursor.execute(
             "INSERT INTO ai_todo(title, description) VALUES(?, ?)",
             (title, description)
         )
         conn.commit()
 
-        # Pehle hi language confirm karne ke liye voice response set karo
-        # Kyunki task create hone par Zara user ko confirm karegi
-        speech_text = f"Sure! I have added the task: {title}"
+        return templates.TemplateResponse(
+            request=request,
+            name="index.html",
+            context={
+                "request": request,
+                "ai_title": title,
+                "ai_description": description
+            }
+        )
 
-        return {
-            "status": "success",
-            "type": "task",
-            "title": title,
-            "description": description,
-            "speak_text": speech_text
-        }
-
-    # CASE B: Agar sirf normal Baat-cheet ya Sawaal hai
     elif result_type == "answer":
         answer = task_data.get("answer")
-        
-        return {
-            "status": "success",
-            "type": "answer",
-            "speak_text": answer
-        }
+
+        return templates.TemplateResponse(
+            request=request,
+            name="index.html",
+            context={
+                "request": request,
+                "ai_answer": answer
+            }
+        )
 
     else:
-        return {"status": "error", "message": "Unknown response type"}
-
-
-
-
-
-
-
-# @app.post("/ai_create_task")
-# def create_task_from_ai(request: Request, text: str = Form(...)):
-#     ai_response = call_llm(text)
-
-#     print("AI RESPONSE =", repr(ai_response))
-
-#     if not ai_response:
-#         raise HTTPException(status_code=500, detail="AI response is empty")
-
-#     try:
-#         cleaned = ai_response.replace("```json", "").replace("```", "").strip()
-#         task_data = json.loads(cleaned)
-#     except json.JSONDecodeError:
-#         raise HTTPException(status_code=400, detail="AI response is not valid JSON")
-
-#     result_type = task_data.get("type")
-
-#     if result_type == "task":
-#         title = task_data.get("title")
-#         description = task_data.get("description")
-
-#         cursor.execute(
-#             "INSERT INTO ai_todo(title, description) VALUES(?, ?)",
-#             (title, description)
-#         )
-#         conn.commit()
-
-#         return templates.TemplateResponse(
-#             request=request,
-#             name="index.html",
-#             context={
-#                 "request": request,
-#                 "ai_title": title,
-#                 "ai_description": description
-#             }
-#         )
-
-#     elif result_type == "answer":
-#         answer = task_data.get("answer")
-
-#         return templates.TemplateResponse(
-#             request=request,
-#             name="index.html",
-#             context={
-#                 "request": request,
-#                 "ai_answer": answer
-#             }
-#         )
-
-#     else:
-#         raise HTTPException(status_code=400, detail="Invalid AI response type")
+        raise HTTPException(status_code=400, detail="Invalid AI response type")
 
 @app.post("/create",  status_code=status.HTTP_303_SEE_OTHER)
 def create_task(   title: str = Form(...),
@@ -179,7 +118,7 @@ def create_task(   title: str = Form(...),
 
     return RedirectResponse(url="/", status_code=status.HTTP_303_SEE_OTHER)
 
-@app.post("/update/{id}" ,response_model=TaskResponseSchema, status_code=status.HTTP_201_CREATED )
+@app.post("/update/{id}" )
 def update_task(    id: int,
     status: str = Form(None),
     due_date: str = Form(None),
